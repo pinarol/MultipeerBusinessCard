@@ -9,43 +9,73 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
-    var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+    enum Page: String, CaseIterable, Identifiable {
+        case businessCard = "Business Card"
+        
+        var id: Int {
+            self.rawValue.hashValue
+        }
+        
+        var title: String {
+            rawValue
         }
     }
-
+    @State var presentedItems: [Page] = []
+    
+    @Environment(\.modelContext) private var modelContext
+    @AppStorage("displayName") private var displayName: String = ""
+    
+    @Query private var items: [Item]
+    
+    var body: some View {
+        NavigationStack(path: $presentedItems) {
+            VStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    TextField("Display Name", text: $displayName)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.emailAddress)
+                        .disableAutocorrection(true)
+                    Text("Display name helps other people to discover you.")
+                        .font(.footnote)
+                        .foregroundColor(Color(UIColor.secondaryLabel))
+                }
+                VStack(alignment: .center, spacing: 10) {
+                    NavigationLink(value: Page.businessCard) {
+                        Text("Next")
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.accentColor)
+                            .foregroundColor(.white)
+                            .fontWeight(.medium)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    .frame(alignment: .center)
+                    .disabled(displayName.isEmpty)
+                    .padding(.vertical, 20)
+                    .multilineTextAlignment(.center)
+                }
+                Spacer()
+                
+            }
+            .padding()
+            .navigationTitle("Multipeer Connection Demo")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: Page.self, destination: { value in
+                switch value {
+                case .businessCard:
+                    Text("sadf")
+                }
+            })
+        }
+    }
+    
     private func addItem() {
         withAnimation {
             let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
