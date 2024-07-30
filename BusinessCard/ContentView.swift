@@ -24,16 +24,13 @@ struct ContentView: View {
     
     @Environment(\.modelContext) private var modelContext
     @AppStorage("displayName") private var displayName: String = ""
-    
-    @Query private var items: [Item]
-    
+        
     var body: some View {
         NavigationStack(path: $presentedItems) {
             VStack {
                 VStack(alignment: .leading, spacing: 10) {
                     TextField("Display Name", text: $displayName)
                         .textInputAutocapitalization(.never)
-                        .keyboardType(.emailAddress)
                         .disableAutocorrection(true)
                     Text("Display name helps other people to discover you.")
                         .font(.footnote)
@@ -63,12 +60,13 @@ struct ContentView: View {
             .navigationDestination(for: Page.self, destination: { value in
                 switch value {
                 case .businessCard:
-                    Text("sadf")
+                    CardSharingView()
                 }
             })
         }
     }
     
+    /*
     private func addItem() {
         withAnimation {
             let newItem = Item(timestamp: Date())
@@ -82,10 +80,10 @@ struct ContentView: View {
                 modelContext.delete(items[index])
             }
         }
-    }
+    }*/
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Peer.self, inMemory: true)
 }

@@ -15,6 +15,8 @@
 		914A92422C592024000A2900 /* BusinessCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92412C592024000A2900 /* BusinessCardTests.swift */; };
 		914A924C2C592024000A2900 /* BusinessCardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A924B2C592024000A2900 /* BusinessCardUITests.swift */; };
 		914A924E2C592024000A2900 /* BusinessCardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A924D2C592024000A2900 /* BusinessCardUITestsLaunchTests.swift */; };
+		914A925B2C5932DD000A2900 /* CardSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A925A2C5932DD000A2900 /* CardSharingView.swift */; };
+		914A925D2C593750000A2900 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A925C2C593750000A2900 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		914A92472C592024000A2900 /* BusinessCardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusinessCardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		914A924B2C592024000A2900 /* BusinessCardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardUITests.swift; sourceTree = "<group>"; };
 		914A924D2C592024000A2900 /* BusinessCardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		914A925A2C5932DD000A2900 /* CardSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSharingView.swift; sourceTree = "<group>"; };
+		914A925C2C593750000A2900 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,8 @@
 				914A92322C592022000A2900 /* Item.swift */,
 				914A92342C592024000A2900 /* Assets.xcassets */,
 				914A92362C592024000A2900 /* Preview Content */,
+				914A925A2C5932DD000A2900 /* CardSharingView.swift */,
+				914A925C2C593750000A2900 /* CardView.swift */,
 			);
 			path = BusinessCard;
 			sourceTree = "<group>";
@@ -261,8 +267,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				914A92312C592022000A2900 /* ContentView.swift in Sources */,
+				914A925B2C5932DD000A2900 /* CardSharingView.swift in Sources */,
 				914A92332C592022000A2900 /* Item.swift in Sources */,
 				914A922F2C592022000A2900 /* BusinessCardApp.swift in Sources */,
+				914A925D2C593750000A2900 /* CardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
