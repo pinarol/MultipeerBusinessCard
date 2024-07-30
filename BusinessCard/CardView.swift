@@ -28,11 +28,13 @@ struct CardView: View {
             if let phone = peer.phone {
                 Text(phone)
                     .font(.caption)
+
             }
             Text(peer.displayName)
                 .font(.footnote)
                 .foregroundColor(Color(UIColor.secondaryLabel))
         }
+        .textSelection(.enabled)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color(UIColor.secondarySystemBackground))

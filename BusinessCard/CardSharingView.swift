@@ -14,101 +14,120 @@ struct CardSharingView: View {
     @AppStorage("email") private var email: String = ""
     @AppStorage("phone") private var phone: String = ""
     @AppStorage("job") private var job: String = ""
-    @Query(sort: \Peer.name, order: .forward) private var peers: [Peer]
+    @Query/*(sort: \Peer.name, order: .forward)*/ private var peers: [Peer]
     @State private var errorMessage: String? = nil
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                VStack {
-                    HStack {
-                        TextField("Name Surname", text: $name)
-                            .textInputAutocapitalization(.never)
-                            .keyboardType(.alphabet)
-                            .disableAutocorrection(true)
-                            .font(.title2)
-                            .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        
-                        Spacer()
-                        menuToAddPeer(
-                            label:
-                                Button(
-                                    action: { },
-                                    label: { Label("", systemImage: "square.and.arrow.up") }
-                                ),
-                            addAnotherPeer: false
-                        )
-                    }
-                    TextField("Job", text: $job)
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.alphabet)
-                        .disableAutocorrection(true)
-                        .font(.headline)
-                        .padding(.init(top: 0, leading: 0, bottom: 12, trailing: 0))
-                    TextField("Email", text: $email)
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.emailAddress)
-                        .disableAutocorrection(true)
-                        .font(.subheadline)
-                    TextField("+(10) 453 56 43", text: $phone)
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.phonePad)
-                        .disableAutocorrection(true)
-                        .font(.footnote)
-                }
-                .padding()
-                .background(Color(UIColor.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .foregroundColor(Color(UIColor.label))
-                
-                // Error message view
-                if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
-                        .transition(.opacity)
-                }
-                
-                HStack(alignment: .center) {
-                    Text("Connections")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                        .multilineTextAlignment(.leading)
-                    Spacer()
+
+            VStack {
+
+                List {
+                    myEditableCard().listRowSeparator(.hidden)
                     
-                    menuToAddPeer(
-                        label:
-                            Button("+ Add") {
-                                
-                            }
-                            .font(.headline)
-                            .fontWeight(.medium)
-                            .foregroundColor(Color(UIColor.white))
-                            .padding(.init(top: 3, leading: 8, bottom: 3, trailing: 8))
-                            .background(Color(UIColor.tintColor))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                        , addAnotherPeer: true
-                    )
-                }
-                .padding(.init(top: 20, leading: 0, bottom: 10, trailing: 0))
-                
-                if peers.isEmpty {
-                    Text("You don't have any connections yet. Why not start adding some?")
-                        .foregroundColor(Color(UIColor.secondaryLabel))
-                }
-                
-                VStack {
-                    ForEach(peers) { peer in
-                        CardView(peer: peer)
+                    // Error message view
+                    if let errorMessage = errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                            .transition(.opacity)
+                            .listRowSeparator(.hidden)
+                    }
+                    connectionsSectionHeader().listRowSeparator(.hidden)
+                    if peers.isEmpty {
+                        Text("You don't have any connections yet. Why not start adding some?")
+                            .foregroundColor(Color(UIColor.secondaryLabel))
+                    }
+                    Section {
+                        ForEach(peers) { peer in
+                            CardView(peer: peer)
+                                .listRowSeparator(.hidden)
+
+                        }
+                        .onDelete(perform: deleteItems)
                     }
                 }
+                .listStyle(PlainListStyle())
+                .selectionDisabled()
+                .listRowSeparatorTint(.clear)
             }
-            .padding()
+            .frame(maxWidth: .infinity)
+    }
+    
+    private func connectionsSectionHeader() -> some View {
+        HStack(alignment: .center) {
+            Text("Connections")
+                .font(.title3)
+                .fontWeight(.medium)
+                .multilineTextAlignment(.leading)
+            Spacer()
+            
+            menuToAddPeer(
+                label:
+                    Button("+ Add") {
+                        
+                    }
+                    .font(.headline)
+                    .fontWeight(.medium)
+                    .foregroundColor(Color(UIColor.white))
+                    .padding(.init(top: 3, leading: 8, bottom: 3, trailing: 8))
+                    .background(Color(UIColor.tintColor))
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                , addAnotherPeer: true
+            )
         }
-        
+        .padding(.init(top: 24, leading: 0, bottom: 8, trailing: 0))
+    }
+    private func myEditableCard() -> some View {
+        VStack {
+            HStack {
+                TextField("Name Surname", text: $name)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.alphabet)
+                    .disableAutocorrection(true)
+                    .font(.title2)
+                    .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                
+                Spacer()
+                menuToAddPeer(
+                    label:
+                        Button(
+                            action: { },
+                            label: { Label("", systemImage: "square.and.arrow.up") }
+                        ),
+                    addAnotherPeer: false
+                )
+            }
+            TextField("Job", text: $job)
+                .textInputAutocapitalization(.never)
+                .keyboardType(.alphabet)
+                .disableAutocorrection(true)
+                .font(.headline)
+                .padding(.init(top: 0, leading: 0, bottom: 12, trailing: 0))
+            TextField("Email", text: $email)
+                .textInputAutocapitalization(.never)
+                .keyboardType(.emailAddress)
+                .disableAutocorrection(true)
+                .font(.subheadline)
+            TextField("+(10) 453 56 43", text: $phone)
+                .textInputAutocapitalization(.never)
+                .keyboardType(.phonePad)
+                .disableAutocorrection(true)
+                .font(.footnote)
+        }
+        .padding()
+        .background(Color(UIColor.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .foregroundColor(Color(UIColor.label))
+    }
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(peers[index])
+            }
+        }
     }
     
     // Function to create a menu with the given label
@@ -139,7 +158,7 @@ struct CardSharingView: View {
     func browseForPeers() {
         guard !name.isEmpty, !email.isEmpty else {
             showError(message: "Please fill in Name and Email to continue")
-
+            
             return
         }
     }
@@ -185,7 +204,7 @@ let previewContainer: ModelContainer = {
         let samplePeers = [
             Peer(displayName: "Sir Tom Jones", lastSeen: Date(), name: "Tom Jones", email: "tomjones@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
             Peer(displayName: "Celine Dion", lastSeen: Date(), name: "Celine Dion", email: "celine@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
-            Peer(displayName: "Mariah Carey", lastSeen: Date(), name: "Mariah Carey", email: "email@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
+            Peer(displayName: "Mariah Carey", lastSeen: Date(), name: "Mariah Carey", email: "mariah@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
         ]
         
         for peer in samplePeers {
