@@ -20,33 +20,25 @@ struct CardSharingView: View {
     @State private var isBrowserPresented = false
     //private let serviceType = "my-peers"
     @ObservedObject var multipeerSession: MultipeerSession
-
+    
     var body: some View {
             VStack {
                 List {
                     myEditableCard().listRowSeparator(.hidden)
-                    
-                    // Error message view
                     if let errorMessage = errorMessage {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 10)
-                            .transition(.opacity)
-                            .listRowSeparator(.hidden)
+                        inlineErrorView(errorMessage).listRowSeparator(.hidden)
                     }
                     connectionsSectionHeader().listRowSeparator(.hidden)
                     if peers.isEmpty {
                         Text("You don't have any connections yet. Why not start adding some?")
+                            .listRowSeparator(.hidden)
                             .foregroundColor(Color(UIColor.secondaryLabel))
                     }
                     Section {
                         ForEach(peers) { peer in
                             CardView(peer: peer)
                                 .listRowSeparator(.hidden)
-
+                            
                         }
                         .onDelete(perform: deleteItems)
                     }
@@ -72,6 +64,30 @@ struct CardSharingView: View {
             .onDisappear() {
                 multipeerSession.stopAdvertising()
             }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(value: Page.settings) {
+                        Label {
+                            
+                        } icon: {
+                            Image(systemName: "gearshape")
+                        }
+
+                    }
+                }
+            }
+    }
+    
+    private func inlineErrorView(_ errorMessage: String) -> some View {
+        // Error message view
+        Text(errorMessage)
+            .foregroundColor(.red)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(radius: 10)
+            .transition(.opacity)
+            .listRowSeparator(.hidden)
     }
     
     private func connectionsSectionHeader() -> some View {
