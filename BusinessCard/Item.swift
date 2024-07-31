@@ -13,6 +13,7 @@ final class Peer: Identifiable {
     var id: String {
         displayName
     }
+    
     var displayName: String
     var lastSeen: Date?
     var name: String?

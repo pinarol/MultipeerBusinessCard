@@ -15,12 +15,12 @@ struct CardSharingView: View {
     @AppStorage("email") private var email: String = ""
     @AppStorage("phone") private var phone: String = ""
     @AppStorage("job") private var job: String = ""
-    @Query/*(sort: \Peer.name, order: .forward)*/ private var peers: [Peer]
+    @Query(sort: \Peer.name, order: .forward) private var peers: [Peer]
     @State private var errorMessage: String? = nil
     @State private var isBrowserPresented = false
-    //private let serviceType = "my-peers"
     @ObservedObject var multipeerSession: MultipeerSession
-    
+    @State private var isSharingSessionPresented = false
+
     var body: some View {
             VStack {
                 List {
@@ -48,8 +48,16 @@ struct CardSharingView: View {
                 .listRowSeparatorTint(.clear)
             }
             .sheet(isPresented: $isBrowserPresented) {
-                BrowsePeers(peers: $multipeerSession.discoveredPeers) { peerID in
-                    multipeerSession.invitePeer(peerID)
+                BrowsePeers(peerIDs: $multipeerSession.discoveredPeers) { peerIDs in
+                    for peerID in peerIDs {
+                        multipeerSession.invitePeer(peerID)
+                    }
+                    withAnimation {
+                        isBrowserPresented = false
+                    }
+                    completion: {
+                        isSharingSessionPresented = true
+                    }
                 }.onAppear() {
                     multipeerSession.startBrowsing()
                 }
@@ -57,12 +65,22 @@ struct CardSharingView: View {
                     multipeerSession.stopBrowsing()
                 }
             }
+            .sheet(isPresented: $isSharingSessionPresented) {
+                SharingSessionView(peers: $multipeerSession.incomingPeerInfo) { peers in
+                    multipeerSession.persistPeers(peers)
+                    isSharingSessionPresented = false
+                    multipeerSession.restartSession()
+                }
+            }
             .frame(maxWidth: .infinity)
             .onAppear() {
-                multipeerSession.startAdvertising()
+                multipeerSession.didAcceptInvitation = {
+                    isSharingSessionPresented = true
+                }
+                multipeerSession.startSession()
             }
             .onDisappear() {
-                multipeerSession.stopAdvertising()
+             //   multipeerSession.stopAdvertising()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -223,11 +241,13 @@ struct ContentView_Previews: PreviewProvider {
             userDefaults.set("Software Dev", forKey: "job")
             return userDefaults
         }()
-        CardSharingView(multipeerSession: MultipeerSession(modelContext: previewContainer.mainContext, myPeerId: MCPeerID(displayName: "PeerID")))
+        CardSharingView(multipeerSession: MultipeerSession(modelContext: previewContainer.mainContext, myPeerId: MCPeerID(displayName: previewPeerID)))
             .modelContainer(previewContainer)
             .defaultAppStorage(previewUserDefaults)
     }
 }
+
+let previewPeerID: String = "PeerID"
 
 @MainActor
 let previewContainer: ModelContainer = {

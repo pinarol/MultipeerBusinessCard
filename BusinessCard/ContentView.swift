@@ -25,7 +25,7 @@ enum Page: String, CaseIterable, Identifiable {
 struct ContentView: View {
 
     @State var presentedItems: [Page] = []
-    
+
     @Environment(\.modelContext) private var modelContext
     @AppStorage("displayName") private var displayName: String = ""
         
