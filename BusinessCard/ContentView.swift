@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import MultipeerConnectivity
 
 struct ContentView: View {
     enum Page: String, CaseIterable, Identifiable {
@@ -60,7 +61,7 @@ struct ContentView: View {
             .navigationDestination(for: Page.self, destination: { value in
                 switch value {
                 case .businessCard:
-                    CardSharingView()
+                    CardSharingView(multipeerSession: MultipeerSession(modelContext: modelContext, myPeerId: MCPeerID(displayName: displayName)))
                 }
             })
         }

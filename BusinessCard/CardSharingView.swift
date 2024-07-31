@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import MultipeerConnectivity
 
 struct CardSharingView: View {
     @Environment(\.modelContext) private var modelContext
@@ -16,11 +17,12 @@ struct CardSharingView: View {
     @AppStorage("job") private var job: String = ""
     @Query/*(sort: \Peer.name, order: .forward)*/ private var peers: [Peer]
     @State private var errorMessage: String? = nil
-    
+    @State private var isBrowserPresented = false
+    //private let serviceType = "my-peers"
+    @ObservedObject var multipeerSession: MultipeerSession
+
     var body: some View {
-
             VStack {
-
                 List {
                     myEditableCard().listRowSeparator(.hidden)
                     
@@ -53,7 +55,23 @@ struct CardSharingView: View {
                 .selectionDisabled()
                 .listRowSeparatorTint(.clear)
             }
+            .sheet(isPresented: $isBrowserPresented) {
+                BrowsePeers(peers: $multipeerSession.discoveredPeers) { peerID in
+                    multipeerSession.invitePeer(peerID)
+                }.onAppear() {
+                    multipeerSession.startBrowsing()
+                }
+                .onDisappear() {
+                    multipeerSession.stopBrowsing()
+                }
+            }
             .frame(maxWidth: .infinity)
+            .onAppear() {
+                multipeerSession.startAdvertising()
+            }
+            .onDisappear() {
+                multipeerSession.stopAdvertising()
+            }
     }
     
     private func connectionsSectionHeader() -> some View {
@@ -80,6 +98,7 @@ struct CardSharingView: View {
         }
         .padding(.init(top: 24, leading: 0, bottom: 8, trailing: 0))
     }
+    
     private func myEditableCard() -> some View {
         VStack {
             HStack {
@@ -158,9 +177,9 @@ struct CardSharingView: View {
     func browseForPeers() {
         guard !name.isEmpty, !email.isEmpty else {
             showError(message: "Please fill in Name and Email to continue")
-            
             return
         }
+        isBrowserPresented = true
     }
     
     // Function to show the error message temporarily
@@ -176,7 +195,6 @@ struct CardSharingView: View {
     }
 }
 
-
 @MainActor
 struct ContentView_Previews: PreviewProvider {
     
@@ -189,7 +207,7 @@ struct ContentView_Previews: PreviewProvider {
             userDefaults.set("Software Dev", forKey: "job")
             return userDefaults
         }()
-        CardSharingView()
+        CardSharingView(multipeerSession: MultipeerSession(modelContext: previewContainer.mainContext, myPeerId: MCPeerID(displayName: "PeerID")))
             .modelContainer(previewContainer)
             .defaultAppStorage(previewUserDefaults)
     }
