@@ -16,7 +16,8 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     @AppStorage("email") private var email: String = ""
     @AppStorage("phone") private var phone: String = ""
     @AppStorage("job") private var job: String = ""
-    @AppStorage("shareBackMyCardAutomaticially") private var shareBackMyCardAutomaticially: Bool = true
+    @AppStorage("allowsDiscovery") private var allowsDiscovery: Bool = true
+
     var didReceiveInvitationHandler: ((_ fromPeer: MCPeerID, _ invitationHandler: @escaping (Bool, MCSession?) -> Void) -> ())?
     var didAcceptInvitation: (() -> ())?
     var isHosting: Bool = false
@@ -63,6 +64,7 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     }
     
     private func startAdvertising() {
+        guard allowsDiscovery else { return }
         advertiser?.delegate = self
         advertiser?.startAdvertisingPeer()
     }
@@ -152,12 +154,6 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        /*Task {
-         let isInvited = await isInvited(peerID: peerID)
-         invitationHandler(!isInvited, session)
-         }
-         */
-        
         print("I am \(myPeerId.displayName), didReceiveInvitationFromPeer: \(peerID.displayName)")
         print("I am \(myPeerId.displayName), isHosting: \(isHosting)")
         
@@ -185,12 +181,10 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
         Task {
             switch state {
             case .connected:
-                advertiser?.stopAdvertisingPeer()
                 sendMyCurrentInfo(to: [peerID])
             case .connecting:
                 break
             case .notConnected:
-                advertiser?.startAdvertisingPeer()
                 break
             @unknown default:
                 break
