@@ -140,9 +140,8 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     func findPeerByID(_ displayName: String) -> Peer? {
         var result: Peer?
         do {
-            let idToSearch = displayName // "idToSearch" is defined to ignore the weird compiler error
             var fetchDescriptor = FetchDescriptor<Peer>(predicate: #Predicate { peer in
-                peer.displayName == idToSearch
+                peer.displayName == displayName
             })
             fetchDescriptor.fetchLimit = 1
             result = try modelContext.fetch(fetchDescriptor).first
