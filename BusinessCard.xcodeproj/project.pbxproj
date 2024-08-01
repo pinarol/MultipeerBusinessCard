@@ -456,7 +456,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BusinessCard/Info.plist;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This apps wants to use your local network to discover your peers.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "BusinessCard would like to connect to your local network so that it can find nearby devices and exchange business cards.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -487,7 +487,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BusinessCard/Info.plist;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This apps wants to use your local network to discover your peers.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "BusinessCard would like to connect to your local network so that it can find nearby devices and exchange business cards.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
