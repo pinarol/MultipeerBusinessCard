@@ -69,6 +69,8 @@ struct CardSharingView: View {
                 SharingSessionView(peers: $multipeerSession.incomingPeerInfo) { peers in
                     multipeerSession.persistPeers(peers)
                     isSharingSessionPresented = false
+                }
+                .onDisappear() {
                     multipeerSession.restartSession()
                 }
             }
@@ -80,7 +82,6 @@ struct CardSharingView: View {
                 multipeerSession.startSession()
             }
             .onDisappear() {
-             //   multipeerSession.stopAdvertising()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
