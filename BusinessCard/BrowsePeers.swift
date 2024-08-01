@@ -70,25 +70,6 @@ struct BrowsePeers: View {
     }
 }
 
-extension MCPeer {
-    @ViewBuilder
-    func icon() -> some View {
-        switch state {
-        case .connected:
-            Image(systemName: "checkmark.circle.fill").foregroundColor(Color(UIColor.systemGreen))
-        case .notConnected:
-            Image(systemName: "circle.fill").foregroundColor(Color(UIColor.systemRed))
-        case .connecting:
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
-        case .none:
-            Text("None")
-        @unknown default:
-            Text("Unknown")
-        }
-    }
-}
-
 extension MCPeerID: Identifiable {
     public var id: String { displayName }
 }

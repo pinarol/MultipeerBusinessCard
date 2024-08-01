@@ -2,18 +2,6 @@ import SwiftUI
 import MultipeerConnectivity
 import SwiftData
 
-struct MCPeer: Identifiable, Hashable {
-    var peerID: MCPeerID
-    var state: MCSessionState?
-    var isInvited: Bool = false
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(peerID.displayName)
-    }
-    
-    public var id: String { peerID.displayName }
-}
-
 class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate {
     private let serviceType = "my-peers"
     private var myPeerId: MCPeerID
@@ -51,7 +39,6 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
         browser?.delegate = self
         timeStarted = Date()
         startAdvertising()
-        
     }
     
     func restartSession() {
@@ -88,7 +75,7 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     deinit {
         disconnect()
     }
-
+    
     func sendData(_ data: Data, to peers: [MCPeerID]? = nil) {
         do {
             let toPeers = peers ?? session?.connectedPeers
@@ -100,7 +87,7 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
             print("Error sending data: \(error.localizedDescription)")
         }
     }
-
+    
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: (any Error)?) {
         
     }
@@ -130,17 +117,6 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     @MainActor
     func addOrUpdatePeer(peerID: MCPeerID, email: String, name: String, phone: String?, job: String?) {
         incomingPeerInfo[peerID.displayName] = Peer(displayName: peerID.displayName, lastSeen: nil, name: name, email: email, phone: phone, job: job)
-        /*if let peer = findPeerByID(peerID) {
-            print("I am \(myPeerId.displayName). Updating peer: \(peerID.displayName), \(name), \(email)")
-            peer.email = email
-            peer.name = name
-            peer.phone = phone
-            peer.job = job
-        } else {
-            print("I am \(myPeerId.displayName). Adding a new peer: \(peerID.displayName), \(name), \(email)")
-            let newPeer = Peer(displayName: peerID.displayName, lastSeen: nil, name: name, email: email, phone: phone, job: job)
-            modelContext.insert(newPeer)
-        }*/
     }
     
     @MainActor
@@ -174,41 +150,28 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
         }
         return result
     }
-
+    
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         /*Task {
-            let isInvited = await isInvited(peerID: peerID)
-            invitationHandler(!isInvited, session)
-        }
-        */
+         let isInvited = await isInvited(peerID: peerID)
+         invitationHandler(!isInvited, session)
+         }
+         */
         
         print("I am \(myPeerId.displayName), didReceiveInvitationFromPeer: \(peerID.displayName)")
+        print("I am \(myPeerId.displayName), isHosting: \(isHosting)")
         
-        /*guard let context else {
-            invitationHandler(false, session)
-            return
-        }*/
-            /*let jsonObject = try JSONSerialization.jsonObject(with: context, options: [])
-            guard let dictionary = jsonObject as? [String: Any],
-                let peerRunningTime = dictionary["runningTime"] as? TimeInterval else {
-                invitationHandler(false, session)
-                return
+        if !isHosting {
+            if let didReceiveInvitationHandler {
+                // delegate the invitation to user consent
+                didReceiveInvitationHandler(peerID, invitationHandler)
             }
-            let runningTime = -timeStarted.timeIntervalSinceNow
-            let isPeerOlder = (peerRunningTime > runningTime)*/
-            print("I am \(myPeerId.displayName), isHosting: \(isHosting)")
-
-            if !isHosting {
-                if let didReceiveInvitationHandler {
-                    // delegate the invitation to user consent
-                    didReceiveInvitationHandler(peerID, invitationHandler)
-                }
-                else {
-                    print("I am \(myPeerId.displayName), accepting invitation from: \(peerID.displayName)")
-                    invitationHandler(true, session)
-                    didAcceptInvitation?()
-                }
+            else {
+                print("I am \(myPeerId.displayName), accepting invitation from: \(peerID.displayName)")
+                invitationHandler(true, session)
+                didAcceptInvitation?()
             }
+        }
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
@@ -220,25 +183,14 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peerID: \(peerID), state: \(state.description)")
         Task {
-           // await updateInDiscoveredPeers(with: peerID, state: state)
-            
             switch state {
             case .connected:
-                // Check if I invited this person before sending data
-                /*let isInvited = await isInvited(peerID: peerID)
-                // I might not be the inviting party but I opted-in to share my card automaticially
-                let shouldShareMyData = isInvited || self.shareBackMyCardAutomaticially
-                if shouldShareMyData {
-                   sendMyCurrentInfo(to: [peerID])
-                }
-                 if shouldShareMyData {
-                     //advertiser.stopAdvertisingPeer()
-                 }*/
+                advertiser?.stopAdvertisingPeer()
                 sendMyCurrentInfo(to: [peerID])
             case .connecting:
                 break
             case .notConnected:
-               // advertiser?.startAdvertisingPeer()
+                advertiser?.startAdvertisingPeer()
                 break
             @unknown default:
                 break
@@ -252,21 +204,15 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
             sendData(data, to: peers)
         }
     }
-    //
     
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        guard info?["app"] == "peers", peerID != myPeerId, peerID.displayName != previewPeerID, let session else { return }
-        let runningTime = -timeStarted.timeIntervalSinceNow
+        guard info?["app"] == "peers", peerID != myPeerId, peerID.displayName != myPeerId.displayName, peerID.displayName != previewPeerID else { return }
         Task {
             await appendToDiscoveredPeers(peerID)
-        }
-        let userInfo = ["runningTime": runningTime]
-        if let data = try? JSONSerialization.data(withJSONObject: userInfo, options: []) {
-            //browser.invitePeer(peerID, to: session, withContext: data, timeout: 10)
         }
     }
     
@@ -277,18 +223,9 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
     func invitePeer(_ peerID: MCPeerID) {
         print("I am \(myPeerId.displayName), inviting \(peerID.displayName)")
         Task {
-            //await updateInDiscoveredPeers(with: peerID, isInvited: true)
             guard let session else { return }
             isHosting = true
             browser?.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
-/*
-            if let index = await indexInDiscoveredPeers(peerID), discoveredPeers[index].state == .connected {
-                sendMyCurrentInfo(to: [peerID])
-            }
-            else {
-                guard let session else { return }
-                browser?.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
-            }*/
         }
     }
     
@@ -297,12 +234,6 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
         if indexInDiscoveredPeers(peerID) == nil {
             self.discoveredPeers.append(peerID)
         }
-        //self.discoveredPeers.append(MCPeer(peerID: peerID, state: nil))
-    }
-    
-    @MainActor
-    func clearDiscoveredPeers() {
-        //self.discoveredPeers = []
     }
     
     @MainActor
@@ -310,40 +241,12 @@ class MultipeerSession: NSObject, ObservableObject, MCSessionDelegate, MCNearbyS
         if let index = self.discoveredPeers.firstIndex(where: { $0 == peerID }) {
             self.discoveredPeers.remove(at: index)
         }
-        // self.discoveredPeers.removeAll { $0.peerID == peerID }
     }
     
     @MainActor
-    func indexInDiscoveredPeers(_ peerID: MCPeerID) -> Array<MCPeer>.Index? {
+    func indexInDiscoveredPeers(_ peerID: MCPeerID) -> Array<MCPeerID>.Index? {
         self.discoveredPeers.firstIndex(where: { $0 == peerID })
     }
-    
-  /*  @MainActor
-    func updateInDiscoveredPeers(with peerID: MCPeerID, state: MCSessionState?) {
-        if let index = indexInDiscoveredPeers(peerID) {
-            var peer = discoveredPeers[index]
-            peer.state = state
-            discoveredPeers[index] = peer
-        }
-    }
-    
-    @MainActor
-    func updateInDiscoveredPeers(with peerID: MCPeerID, isInvited: Bool) {
-        if let index = indexInDiscoveredPeers(peerID) {
-            var peer = discoveredPeers[index]
-            peer.isInvited = isInvited
-            discoveredPeers[index] = peer
-        }
-    }
-    
-    @MainActor
-    func isInvited(peerID: MCPeerID) -> Bool {
-        if let index = indexInDiscoveredPeers(peerID) {
-            return discoveredPeers[index].isInvited
-        }
-        return false
-    }
-   */
 }
 
 extension MCSessionState {

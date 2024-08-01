@@ -18,8 +18,6 @@
 		914A924E2C592024000A2900 /* BusinessCardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A924D2C592024000A2900 /* BusinessCardUITestsLaunchTests.swift */; };
 		914A925B2C5932DD000A2900 /* CardSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A925A2C5932DD000A2900 /* CardSharingView.swift */; };
 		914A925D2C593750000A2900 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A925C2C593750000A2900 /* CardView.swift */; };
-		914A92642C5976D0000A2900 /* MCBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92632C5976D0000A2900 /* MCBrowserView.swift */; };
-		914A92662C5976F2000A2900 /* BrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92652C5976F2000A2900 /* BrowserCoordinator.swift */; };
 		914A92682C597CE4000A2900 /* MultipeerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92672C597CE4000A2900 /* MultipeerSession.swift */; };
 		914A926A2C598421000A2900 /* BrowsePeers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92692C598421000A2900 /* BrowsePeers.swift */; };
 		914A926C2C5A2C82000A2900 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A926B2C5A2C82000A2900 /* Settings.swift */; };
@@ -58,8 +56,6 @@
 		914A925A2C5932DD000A2900 /* CardSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSharingView.swift; sourceTree = "<group>"; };
 		914A925C2C593750000A2900 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		914A92622C597081000A2900 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		914A92632C5976D0000A2900 /* MCBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCBrowserView.swift; sourceTree = "<group>"; };
-		914A92652C5976F2000A2900 /* BrowserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinator.swift; sourceTree = "<group>"; };
 		914A92672C597CE4000A2900 /* MultipeerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerSession.swift; sourceTree = "<group>"; };
 		914A92692C598421000A2900 /* BrowsePeers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsePeers.swift; sourceTree = "<group>"; };
 		914A926B2C5A2C82000A2900 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -123,8 +119,6 @@
 				914A926B2C5A2C82000A2900 /* Settings.swift */,
 				91139F5D2C5A98F800CDBB66 /* SharingSessionView.swift */,
 				914A92692C598421000A2900 /* BrowsePeers.swift */,
-				914A92632C5976D0000A2900 /* MCBrowserView.swift */,
-				914A92652C5976F2000A2900 /* BrowserCoordinator.swift */,
 				914A925C2C593750000A2900 /* CardView.swift */,
 				914A92672C597CE4000A2900 /* MultipeerSession.swift */,
 			);
@@ -287,8 +281,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				914A92312C592022000A2900 /* ContentView.swift in Sources */,
-				914A92642C5976D0000A2900 /* MCBrowserView.swift in Sources */,
-				914A92662C5976F2000A2900 /* BrowserCoordinator.swift in Sources */,
 				914A925B2C5932DD000A2900 /* CardSharingView.swift in Sources */,
 				914A926C2C5A2C82000A2900 /* Settings.swift in Sources */,
 				914A92682C597CE4000A2900 /* MultipeerSession.swift in Sources */,
