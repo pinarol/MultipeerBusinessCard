@@ -20,7 +20,6 @@ struct SharingSessionView: View {
     }
     
     var body: some View {
-        
         NavigationStack {
             Form {
                 Section {
@@ -29,7 +28,6 @@ struct SharingSessionView: View {
                             CardView(peer: peer)
                             Image(systemName: "checkmark.circle.fill").foregroundColor(
                                 isSelected(peer: peer) ? Color(UIColor.systemGreen) : Color(UIColor.systemGray))
-                            
                         }
                         .onTapGesture {
                             if isSelected(peer: peer) {
@@ -75,7 +73,7 @@ struct SharingSessionView: View {
 
 #Preview {
     let samplePeers = [
-        "Sir Tom Jones": Peer(displayName: "Sir Tom Jones", lastSeen: Date(), name: "Tom Jones", email: "tomjones@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
+        "Sir Tom Jones": Peer(displayName: "Sir Tom Jones", lastSeen: Date(), name: "Sir Tom Jones", email: "tomjones@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
         "Celine Dion": Peer(displayName: "Celine Dion", lastSeen: Date(), name: "Celine Dion", email: "celine@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
         "Mariah Carey": Peer(displayName: "Mariah Carey", lastSeen: Date(), name: "Mariah Carey", email: "mariah@domain.com", phone: "+90 (216) 645 56 32", job: "Singer"),
     ]

@@ -10,7 +10,7 @@
 		91139F5E2C5A98F800CDBB66 /* SharingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91139F5D2C5A98F800CDBB66 /* SharingSessionView.swift */; };
 		914A922F2C592022000A2900 /* BusinessCardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A922E2C592022000A2900 /* BusinessCardApp.swift */; };
 		914A92312C592022000A2900 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92302C592022000A2900 /* ContentView.swift */; };
-		914A92332C592022000A2900 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92322C592022000A2900 /* Item.swift */; };
+		914A92332C592022000A2900 /* Peer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92322C592022000A2900 /* Peer.swift */; };
 		914A92352C592024000A2900 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 914A92342C592024000A2900 /* Assets.xcassets */; };
 		914A92382C592024000A2900 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 914A92372C592024000A2900 /* Preview Assets.xcassets */; };
 		914A92422C592024000A2900 /* BusinessCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914A92412C592024000A2900 /* BusinessCardTests.swift */; };
@@ -45,7 +45,7 @@
 		914A922B2C592022000A2900 /* BusinessCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BusinessCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		914A922E2C592022000A2900 /* BusinessCardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardApp.swift; sourceTree = "<group>"; };
 		914A92302C592022000A2900 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		914A92322C592022000A2900 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		914A92322C592022000A2900 /* Peer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peer.swift; sourceTree = "<group>"; };
 		914A92342C592024000A2900 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		914A92372C592024000A2900 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		914A923D2C592024000A2900 /* BusinessCardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusinessCardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,7 +112,7 @@
 				914A92622C597081000A2900 /* Info.plist */,
 				914A922E2C592022000A2900 /* BusinessCardApp.swift */,
 				914A92302C592022000A2900 /* ContentView.swift */,
-				914A92322C592022000A2900 /* Item.swift */,
+				914A92322C592022000A2900 /* Peer.swift */,
 				914A92342C592024000A2900 /* Assets.xcassets */,
 				914A92362C592024000A2900 /* Preview Content */,
 				914A925A2C5932DD000A2900 /* CardSharingView.swift */,
@@ -284,7 +284,7 @@
 				914A925B2C5932DD000A2900 /* CardSharingView.swift in Sources */,
 				914A926C2C5A2C82000A2900 /* Settings.swift in Sources */,
 				914A92682C597CE4000A2900 /* MultipeerSession.swift in Sources */,
-				914A92332C592022000A2900 /* Item.swift in Sources */,
+				914A92332C592022000A2900 /* Peer.swift in Sources */,
 				914A926A2C598421000A2900 /* BrowsePeers.swift in Sources */,
 				914A922F2C592022000A2900 /* BusinessCardApp.swift in Sources */,
 				91139F5E2C5A98F800CDBB66 /* SharingSessionView.swift in Sources */,
